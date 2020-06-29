@@ -1,4 +1,11 @@
 # Reference
+Format should be double hash ## for general subject
+and triple ### for the more specific reference
+for the clustering text analysis (see README_clustered.md).
+All other hashes >3 will be wrapped into the double hash.
+Single hash not considered.
+
+Considering that, this document needs updated.
 
 ## OS set up
 Linux Debian Stretch. Also includes Debian on Windows Subsystem for Linux (WSL).
