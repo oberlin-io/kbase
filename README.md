@@ -270,6 +270,16 @@ sudo tcpdump -i eth0 -nn -v port 8000
 -nn will not resolve hostnames or ports.
 -v for verbose (can increase like -vvvv).
 
+### TCP flags
+```
+['NS', 'CWR', 'ECE', 'URG', 'ACK', 'PSH', 'RST', 'SYN', 'FIN',]
+[ 256,   128,    64,    32,    16,     8,     4,     2,     1,]
+```
+Decode by taking the hex dump value, like 0x12,
+which is 18 in base 10.
+Start from the left, add get the largest flag,
+here ACK with value 16. Then SYN with value 2.
+
 ## Big data
 ### Spark
 Requires Java JDK. Check version.
