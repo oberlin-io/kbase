@@ -53,6 +53,7 @@ Make this requirements.txt file:
 ```
 PyYAML # import yaml
 pandas
+seaborn
 openpyxl # pandas uses for xlsx writing
 requests
 python-docx # Working with MS Word docs. Check lxml >= 2.3.2
