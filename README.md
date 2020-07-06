@@ -208,10 +208,11 @@ clone <project url>
 
 ### Packages
 ```
-sudo apt-get install netcat
-sudo apt-get install tcpdump
+apt-get install netcat
+apt-get install tcpdump
+apt-get install tcpreplay
 apt-get install tshark
-sudo apt-get install nmap
+apt-get install nmap
 ```
 
 ### Web server
@@ -345,6 +346,16 @@ while True:
 ```
 This one requires sysstat Linux package to run mpstat.
 
+## Data processing
+### Get non-null percent (completeness) of a feature
+Useful for testing merges and joins in how completeness percentages drop
+based on join keys.
+```
+def bread(df):
+    x = round( df.notna().sum() / df.shape[0], 2 )
+    x = x.sort_values(ascending=False)
+    return x
+```
 
 # Windows
 ## Set javac compiler's path
