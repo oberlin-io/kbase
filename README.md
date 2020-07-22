@@ -53,6 +53,7 @@ Make this requirements.txt file:
 ```
 PyYAML # import yaml
 pandas
+XlsxWriter # For pandas writing formatted Excel files
 seaborn
 openpyxl # pandas uses for xlsx writing
 requests
