@@ -519,3 +519,200 @@ the appropriate elements.
   </formatted-text>
 </customized-label>
 ```
+
+
+## Git
+### Clone
+```
+git clone [url]
+```
+### List all remotes
+```
+git remote -v
+```
+### Fetch and merge remote
+```
+pull origin
+```
+### Push
+```
+git push -u origin master
+```
+
+
+## Network PCAP and other datasets
+- Coburg Intrusion Detection Data Sets (CIDDS)
+
+
+## Data model
+### Basics
+X is the matrix (the dataframe df) that comprises the features, ie the columns.
+Y is the target feature matrix.
+
+Each 'row' is an independent observation
+(except time series have a statistical relationship between observations).
+
+### Target distribution or class counts
+Check target distribution if numeric.
+
+For classes:
+```
+Y.target.value_counts() / shape[0]
+```
+
+This may inform train/test data selection. For example, do yo want to train on data
+where a class A is 95% of data and class B %5?
+
+### Duplicate check
+```
+df.duplicated() / df.shape[0]
+# subset=[<column>]
+```
+Then ```drop_duplicates```, and see options for subset and taking first or last, etc.
+
+### Null check
+Null check
+```
+df.feature.isnull().sum() / df.shape[0]
+df.isnull().sum() / df.shape[0]
+```
+
+Then ```fillna()``` or drop observation or feature itself.
+
+### Fill null
+Options:
+- Mean imputation.
+- Predict value via regression,
+but generating model data from a function for the model may cause overfit
+
+### Encode categorical data
+```
+df.join( pd.get_dummies(df.feature) )
+```
+
+Get k-1 with ```drop_first=True```
+
+[pandas.pydata.org](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html)
+
+### Scaling
+```
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+X_scaled = pd.DataFrame(data=scaler.fit_transform(X), columns=X.columns)
+```
+
+[scikit-learn.org](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+
+### Outlier identification with standard deviation
+```
+std = 3
+upper = df.feature.mean() + df.feature.std() * std
+lower = df.feature.mean() - df.feature.std() * std
+```
+
+For categorical data, try count aggregation, then outlier detection. ```df.feature.value_counts()```
+
+### Outlier identification with inter-quartile range (IQR)
+```
+iqr15 = 1.5 * (df.feature.quantile(.75) - df.feature.quantile(.25))
+iqr_upper = df.feature.quantile(.75) + iqr15
+iqr_lower = df.feature.quantile(.25) - iqr15
+```
+
+Then leave, fill, or drop? Check business rules with domain experts.
+
+
+### Correlation coefficient, ie pair grid
+The correlation coefficient (ρ) is a measure that determines the degree to
+which two variables' movements are associated.
+
+```
+df.corr()
+```
+
+Coefficient value (+/- 0-1) classes for pos/neg correlation:
+- Strong: Between +/-0.5 and +/-1
+- Moderate: Between +/-0.3 and +/-0.49
+- Small: Under +/-0.29
+- None: 0
+
+```
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.pairplot(df)
+sns.plt.show()
+```
+
+Does ```sns.plt.savefig('<filename>.png')``` work as ```plt.savefig('<filename>.png')```?
+
+[matplotlib.org](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.savefig.html)
+
+
+### Train and test sets
+Choose test size based on size of data and algorithm.
+The bigger the data set, the larger our test set can be.
+
+```
+from sklearn.model_selection import train_test_split
+X_train, X_test, Y_train, Y_test = train_test_split(
+    X, Y,
+    test_size=0.33,
+    random_state=7
+)
+```
+
+This also shuffles data (if timeseries, do not shuffle).
+
+And random state is set for reproducing results.
+
+
+## Machine learning
+### General info and overall types
+The data model's train set is fed into the algorithm is the parameters of the model.
+Hyperparameters are the parameters to be set on the algorithm itself.
+Evaluate the model performance on the test set.
+
+Types:
+- Supervised with labeled data, ie with target feature
+- Unsupervised without labels
+- Reinforcement uses penalties
+
+### Supervised
+- Linear regression: Predict value
+- Random forest
+  - Random forest regression
+  - Random forest classification
+- Support vector machines: Binary classification
+- K nearest neighbor: Classify
+- Naive Bayes: Classify
+
+### Unsupervised
+- K-means: Clusters
+- Support vector clustering
+
+## Linear regression
+Assumptions:
+
+### Evaluation
+
+
+### Bias and variance tradeoff
+Bias and variance are two different sources of error.
+High bias results from over-assuming from parameters
+and causes underfitting.
+
+High variance is sensitivity of small fluctuations in the training set.
+The algorithm may be modeling random noise. This is overfitting, in which
+Model performs well on training data but not on evaluation data..
+
+### Confusion matrix evaluation
+```
+from sklearn.metrics import confusion_matrix
+```
+
+Precision
+Accuracy
+Error rate
+Mean squared error
+
+## Docker
